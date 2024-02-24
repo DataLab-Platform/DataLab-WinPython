@@ -1,0 +1,155 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Download",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "download.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Distribute source",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "dist.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Clean up",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "clean_up.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "CI_DST": "DataLab-WinPython",
+                    "CI_WNM": "WPy64-31180",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Create distribution",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "build_distribution.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "CI_WNM": "WPy64-31180",
+                    "CI_WPI": "Winpython64-3.11.8.0dot.exe",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Create installer",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "build_installer.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "CI_WNM": "WPy64-31180",
+                    "CI_DST": "DataLab-WinPython",
+                    "CI_WPI": "Winpython64-3.11.8.0dot.exe",
+                    "CI_CYR": "Copyright (C) 2023 DataLab Platform Developers",
+                    "CI_VER": "0.12.0",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Build all",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean up",
+                "Create distribution",
+                "Create installer"
+            ]
+        }
+    ]
+}
