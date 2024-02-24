@@ -1,5 +1,8 @@
 ﻿/*
 
+DataLab-WinPython installer script
+----------------------------------
+
 Licensed under the terms of the BSD 3-Clause
 (see ../LICENSE for details)
 
@@ -56,7 +59,7 @@ RequestExecutionLevel user
 !define MUI_FINISHPAGE_LINK "$(explore_str)"
 !define MUI_FINISHPAGE_LINK_LOCATION "$INSTDIR"
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "$(wpcp_str)"
+!define MUI_FINISHPAGE_RUN_TEXT "$(datalab_str)"
 !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_WELCOME
@@ -67,10 +70,12 @@ RequestExecutionLevel user
 !insertmacro MUI_LANGUAGE "French"
 LangString welcome_str ${LANG_ENGLISH} "This will install ${PRODNAME} on your computer.$\r$\n${PRODNAME} deploys itself as a simple folder unzipping to a custom target directory. Installing this software has thus limited effect on the operating system and will not compromise any existing Python installation.$\r$\n$\r$\nPlease click on Next to continue."
 LangString welcome_str ${LANG_FRENCH} "Vous êtes sur le point d'installer ${PRODNAME} sur votre ordinateur.$\r$\n${PRODNAME} s'installe par une simple copie de fichiers dans un répertoire de destination paramétrable. L'installation n'est pas invasive et peut cohabiter (sans effet de bord) avec n'importe quelle autre distribution Python déjà installée sur cet ordinateur.$\r$\n$\r$\nCliquez sur Suivant pour continuer."
-LangString explore_str ${LANG_ENGLISH} "Browse target directory"
+LangString explore_str ${LANG_ENGLISH} "Browse installation directory"
 LangString explore_str ${LANG_FRENCH} "Explorer le dossier d'installation"
-LangString wpcp_str ${LANG_ENGLISH} "Open WinPython control panel"
-LangString wpcp_str ${LANG_FRENCH} "Démarrer le panneau de contrôle WinPython"
+LangString uninstall_str ${LANG_ENGLISH} "Uninstall ${PRODNAME}"
+LangString uninstall_str ${LANG_FRENCH} "Désinstaller ${PRODNAME}"
+LangString datalab_str ${LANG_ENGLISH} "Run DataLab"
+LangString datalab_str ${LANG_FRENCH} "Lancer DataLab"
 LangString busy_str ${LANG_ENGLISH} "Installer is already running"
 LangString busy_str ${LANG_FRENCH} "L'installeur est déjà en cours d'ex�cution"
 LangString uninst_str ${LANG_ENGLISH} "Permanantly remove ${PRODNAME}?"
@@ -110,8 +115,8 @@ Section "" SecWinPython
 	${locate::Close} $0
 	${locate::Unload}
 
-    createShortCut "$SMPROGRAMS\${PRODNAME}\Dossier d'installation.lnk" "$INSTDIR\"
-    ; createShortCut "$SMPROGRAMS\${PRODNAME}\Désinstaller.lnk" "$INSTDIR\uninstaller.exe"
+    createShortCut "$SMPROGRAMS\${PRODNAME}\$(explore_str).lnk" "$INSTDIR\"
+    createShortCut "$SMPROGRAMS\${PRODNAME}\$(uninstall_str).lnk" "$INSTDIR\uninstaller.exe"
     WriteRegStr HKCU "${UINSTREG}" "DisplayName" "${PRODNAME}"
     WriteRegStr HKCU "${UINSTREG}" "DisplayVersion" "${VERSIONPROD}"
     WriteRegStr HKCU "${UINSTREG}" "Publisher" "${PUBLISHER}"
@@ -150,7 +155,7 @@ Function .onInit
     ${EndIf}
 FunctionEnd
 Function LaunchLink
-  ExecShell "" "$INSTDIR\WinPython Control Panel.exe"
+  ExecShell "" "$INSTDIR\DataLab.exe"
 FunctionEnd
 
 ; Descriptions

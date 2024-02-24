@@ -13,8 +13,6 @@ ren %CI_WNM% %CI_DST%
 
 @REM Build installer
 @REM ===========================================================================
-copy "executables\*.ico" "%CI_DST%\scripts"
-copy "executables\*.bat" "%CI_DST%"
 set NSIS_DIST_PATH=%ROOTPATH%%CI_DST%
 set NSIS_PRODUCT_NAME=%CI_DST%
 set NSIS_PRODUCT_ID=%CI_DST%
