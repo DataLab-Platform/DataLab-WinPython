@@ -1,6 +1,8 @@
 DataLab-WinPython
 =================
 
+![DataLab-WinPython](https://raw.githubusercontent.com/DataLab-Platform/DataLab-WinPython/main/resources/DataLab-WinPython.png)
+
 Description
 -----------
 
