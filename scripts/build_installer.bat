@@ -6,6 +6,7 @@ REM Licensed under the terms of the BSD 3-Clause
 REM (see cdl/LICENSE for details)
 REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
+call %FUNC% SetEnvVars
 set ROOTPATH=%SCRIPTPATH%\..\
 cd %ROOTPATH%
 
@@ -24,13 +25,8 @@ set NSIS_COPYRIGHT_INFO=%CI_CYR%
 
 @REM Create release directory
 @REM ===========================================================================
-set RLSPTH=%ROOTPATH%%CI_DST%-%CI_VER%_release\
-set SRCPTH=%RLSPTH%\source\
-rmdir /S /Q %RLSPTH%
+if exist "%RLSPTH%" ( rmdir /s /q "%RLSPTH%" )
 mkdir %RLSPTH%
 move %ROOTPATH%%CI_DST%-%CI_VER%.exe %RLSPTH%
-set AddToSource="C:\Program Files\7-Zip\7z.exe" a -mx1 "%RLSPTH%%CI_DST%-%CI_VER%_source.zip"
-%AddToSource% executables nsis packages prerequisites scripts
-%AddToSource% create_installer.bat README.md requirements.txt %CI_WPI%
 
 call %FUNC% EndOfScript

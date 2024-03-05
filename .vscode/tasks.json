@@ -2,6 +2,33 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Clean up",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "clean_up.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
             "label": "Download",
             "type": "shell",
             "command": "cmd",
@@ -26,36 +53,7 @@
             }
         },
         {
-            "label": "Clean up",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "clean_up.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "UNATTENDED": "1",
-                    "CI_DST": "DataLab-WinPython",
-                    "CI_WNM": "WPy64-31180",
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Create distribution",
+            "label": "Build distribution",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -66,8 +64,6 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "CI_WNM": "WPy64-31180",
-                    "CI_WPI": "Winpython64-3.11.8.0dot.exe",
                 }
             },
             "group": {
@@ -84,7 +80,7 @@
             }
         },
         {
-            "label": "Create installer",
+            "label": "Build installer",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -95,11 +91,6 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "CI_WNM": "WPy64-31180",
-                    "CI_DST": "DataLab-WinPython",
-                    "CI_WPI": "Winpython64-3.11.8.0dot.exe",
-                    "CI_CYR": "Copyright (C) 2023 DataLab Platform Developers",
-                    "CI_VER": "0.12.0",
                 }
             },
             "group": {
@@ -124,8 +115,9 @@
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Clean up",
-                "Create distribution",
-                "Create installer",
+                "Download",
+                "Build distribution",
+                "Build installer",
             ]
         }
     ]

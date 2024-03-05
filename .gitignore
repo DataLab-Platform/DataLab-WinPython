@@ -13,6 +13,7 @@ nsis/icons/*.ico
 nsis/images/*.bmp
 packages/
 Win*.exe
+WPy*/
 
 # Created by https://www.gitignore.io/api/python
 

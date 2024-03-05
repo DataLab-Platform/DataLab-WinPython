@@ -6,6 +6,7 @@ REM Licensed under the terms of the BSD 3-Clause
 REM (see cdl/LICENSE for details)
 REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
+call %FUNC% SetEnvVars
 set ROOTPATH=%SCRIPTPATH%\..\
 cd %ROOTPATH%
 
@@ -26,6 +27,7 @@ rmdir /S /Q notebooks
 rmdir /S /Q t
 cd %ROOTPATH%
 @REM Install packages
+pip install --no-cache-dir --no-index --find-links=packages cdl==%CI_VER%
 pip install --no-cache-dir --no-index --find-links=packages -r requirements.txt
 
 @REM Create additional launchers
