@@ -30,7 +30,7 @@ Technologies
 DataLab-WinPython is based on the following technologies:
 
 * Windows batch scripts (to minimize prerequisites)
-* NSIS installer creation software, with the "Locate" plugin
+* NSIS installer creation software
 * WinPython Python distribution
 * Python package manager "pip"
 * 7-zip compression software

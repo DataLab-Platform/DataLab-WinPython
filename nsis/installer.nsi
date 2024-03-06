@@ -70,8 +70,8 @@ RequestExecutionLevel user
 !insertmacro MUI_LANGUAGE "French"
 LangString welcome_str ${LANG_ENGLISH} "This will install ${PRODNAME} on your computer.$\r$\n${PRODNAME} deploys itself as a simple folder unzipping to a custom target directory. Installing this software has thus limited effect on the operating system and will not compromise any existing Python installation.$\r$\n$\r$\nPlease click on Next to continue."
 LangString welcome_str ${LANG_FRENCH} "Vous êtes sur le point d'installer ${PRODNAME} sur votre ordinateur.$\r$\n${PRODNAME} s'installe par une simple copie de fichiers dans un répertoire de destination paramétrable. L'installation n'est pas invasive et peut cohabiter (sans effet de bord) avec n'importe quelle autre distribution Python déjà installée sur cet ordinateur.$\r$\n$\r$\nCliquez sur Suivant pour continuer."
-LangString explore_str ${LANG_ENGLISH} "Browse installation directory"
-LangString explore_str ${LANG_FRENCH} "Explorer le dossier d'installation"
+LangString explore_str ${LANG_ENGLISH} "Browse ${PRODNAME} installation directory"
+LangString explore_str ${LANG_FRENCH} "Explorer le dossier d'installation de ${PRODNAME}"
 LangString uninstall_str ${LANG_ENGLISH} "Uninstall ${PRODNAME}"
 LangString uninstall_str ${LANG_FRENCH} "Désinstaller ${PRODNAME}"
 LangString datalab_str ${LANG_ENGLISH} "Run DataLab"
@@ -95,26 +95,7 @@ Section "" SecWinPython
     File /r "${DISTDIR}\*.*"
     WriteUninstaller $INSTDIR\uninstaller.exe
     createDirectory "$SMPROGRAMS\${PRODNAME}"
-
-	${locate::Open} "$INSTDIR" `/F=1 /D=0 /M=*.* /B=1 /X=exe|bat /G=0` $0
-	StrCmp $0 0 0 loop
-	MessageBox MB_OK "Error" IDOK close
-	loop:
-	${locate::Find} $0 $1 $2 $3 $4 $5 $6
-    StrCmp $3 '' close
-    ${GetBaseName} $3 $R0
-    StrCpy $R1 "$INSTDIR\scripts\$R0.ico"
-    IfFileExists $R1 has_icon no_icon
-    has_icon:
-    createShortCut "$SMPROGRAMS\${PRODNAME}\$R0.lnk" "$INSTDIR\$3" "" "$R1"
-    goto loop
-    no_icon:
-    createShortCut "$SMPROGRAMS\${PRODNAME}\$R0.lnk" "$INSTDIR\$3"
-    goto loop
-	close:
-	${locate::Close} $0
-	${locate::Unload}
-
+    createShortCut "$SMPROGRAMS\${PRODNAME}\DataLab (WinPython).lnk" "$INSTDIR\DataLab.exe"
     createShortCut "$SMPROGRAMS\${PRODNAME}\$(explore_str).lnk" "$INSTDIR\"
     createShortCut "$SMPROGRAMS\${PRODNAME}\$(uninstall_str).lnk" "$INSTDIR\uninstaller.exe"
     WriteRegStr HKCU "${UINSTREG}" "DisplayName" "${PRODNAME}"
