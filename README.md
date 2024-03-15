@@ -7,7 +7,7 @@ Description
 -----------
 
 DataLab-WinPython is a Python distribution for Windows, based on WinPython, 
-including DataLab (the open-source platform for scientific data analysis) and
+including [DataLab](https://datalab-platform.com/) (the open-source platform for scientific data analysis) and
 its dependencies.
 
 Motivation
