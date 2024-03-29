@@ -27,6 +27,6 @@ set NSIS_COPYRIGHT_INFO=%CI_CYR%
 @REM ===========================================================================
 if exist "%RLSPTH%" ( rmdir /s /q "%RLSPTH%" )
 mkdir %RLSPTH%
-move %ROOTPATH%%CI_DST%-%CI_VER%.exe %RLSPTH%
+move /Y %ROOTPATH%%CI_DST%-%CI_VER%.exe %RLSPTH%\%CI_DST%-%CI_VER%_%CI_SUF%.exe
 
 call %FUNC% EndOfScript
