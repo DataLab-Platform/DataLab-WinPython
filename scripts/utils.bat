@@ -33,16 +33,13 @@ REM ======================================================
     )
     goto:eof
 
-:UseWinPython
-    if defined WINPYDIRBASE (
-        call %WINPYDIRBASE%\scripts\env.bat
-        call :ShowTitle "Using WinPython from %WINPYDIRBASE%"
-    ) else (
-        echo Warning: WINPYDIRBASE environment variable is not defined, switching to system Python
-        echo ********
-        echo (if nothing happens, that's probably because Python is not installed either:
-        echo please set the WINPYDIRBASE variable to select WinPython directory, or install Python)
-        )
+:DeployPython
+    echo Deploying temporary Python environment...
+    cd %~dp0..
+    if not exist ".\tmp" ( mkdir ".\tmp" )
+    "C:\Program Files\7-Zip\7z.exe" x -y -o".\tmp" "%CI_WPI%" >nul
+    for /D %%I in (.\tmp\*) do set WP_FOLDER=%%~nxI
+    call ".\tmp\%WP_FOLDER%\scripts\env_for_icons.bat" %*
     goto:eof
 
 :ShowTitle

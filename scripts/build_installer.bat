@@ -19,16 +19,20 @@ for /f "tokens=1-2 delims=." %%b in ("!VERSION_PART!") do (
 )
 set PYSUFFIX=Py!MAJOR!!MINOR!
 
+@REM Export installer images
+@REM ===========================================================================
+echo Generating images for WiX installer...
+pushd %ROOTPATH%\resources
+call deploy.bat
+popd
+
 @REM Build installer
 @REM ===========================================================================
-set NSIS_DIST_PATH=%ROOTPATH%\DIST\%CI_DST%
-set NSIS_PRODUCT_NAME=%CI_DST%
-set NSIS_PRODUCT_ID=%CI_DST%
-set NSIS_INSTALLDIR=C:\%CI_DST%
-set NSIS_PRODUCT_VERSION=%CI_VER%
-set NSIS_INSTALLER_VERSION=%CI_VER%.0
-set NSIS_COPYRIGHT_INFO=%CI_CYR%
-"C:\Program Files (x86)\NSIS\makensis.exe" nsis\installer.nsi
+call %FUNC% DeployPython
+echo Generating .wxs file for WiX installer...
+%PYTHON% "wix\makewxs.py" %CI_DST% %CI_VER%
+echo Building WiX Installer...
+wix build "wix\%CI_DST%-%CI_VER%.wxs" -ext WixToolset.UI.wixext
 
 @REM Create release directory
 @REM ===========================================================================
@@ -36,6 +40,10 @@ if not exist "%ROOTPATH%\releases" ( mkdir "%ROOTPATH%\releases" )
 set RLSPTH=%ROOTPATH%\releases\%CI_DST%-%CI_VER%_release\
 if exist "%RLSPTH%" ( rmdir /s /q "%RLSPTH%" )
 mkdir %RLSPTH%
-move /Y %ROOTPATH%\%CI_DST%-%CI_VER%.exe %RLSPTH%\%CI_DST%-%CI_VER%_%PYSUFFIX%.exe
+move /Y %ROOTPATH%\wix\%CI_DST%-%CI_VER%.msi %RLSPTH%\%CI_DST%-%CI_VER%_%PYSUFFIX%.msi
+explorer %RLSPTH%
+
+@REM Clean up
+rmdir /S /Q ".\tmp"
 
 call %FUNC% EndOfScript

@@ -18,7 +18,7 @@ if not exist "%ROOTPATH%\dist" ( mkdir "%ROOTPATH%\dist" )
 if exist "%ROOTPATH%\dist\%CI_DST%" ( rmdir /s /q "%ROOTPATH%\dist\%CI_DST%" )
 
 @REM Rename extracted folder to %CI_DST%
-if not exist ".\tmp" ( mkdir ".\tmp" )
+if exist ".\tmp" ( rmdir /s /q ".\tmp" )
 "C:\Program Files\7-Zip\7z.exe" x -y -o".\tmp" "%CI_WPI%"
 for /D %%I in (.\tmp\*) do set WP_FOLDER=%%~nxI
 pushd ".\tmp"
@@ -44,6 +44,11 @@ cd %ROOTPATH%
 @REM Install packages
 pip install --no-cache-dir --no-index --find-links=packages cdl==%CI_VER%
 pip install --no-cache-dir --no-index --find-links=packages -r requirements.txt
+
+@REM Remove all '__pycache__' folders
+@REM for /d /r "%ROOTPATH%\dist\%CI_DST%" %%d in (__pycache__) do (
+@REM     rd /s /q "%%d"
+@REM )
 
 @REM Create additional launchers
 @REM ===========================================================================

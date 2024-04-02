@@ -1,0 +1,44 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+    xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+    <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="200" Scope="perUser">
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <Icon Id="DataLab.exe" SourceFile=".\executables\DataLab.ico" />
+        <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
+        <WixVariable Id="WixUIDialogBmp" Value=".\wix\dialog.bmp" />
+        <WixVariable Id="WixUIBannerBmp" Value=".\wix\banner.bmp" />
+        <MediaTemplate EmbedCab="yes" />
+        <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER"/>
+        <Feature Id="ProductFeature" Title="DataLab-WinPython" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+    </Package>
+    <Fragment>
+        <StandardDirectory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLFOLDER" Name="DataLab-WinPython">
+                <!-- Automatically inserted directories -->
+            </Directory>
+        </StandardDirectory>
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="DataLab-WinPython" />
+        </StandardDirectory>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ProductComponents">
+            <Component Id="PC_Files" Directory="INSTALLFOLDER" Guid="502b999f-a88e-464b-ba6c-a8c987937c41">
+                <File Source=".\dist\DataLab-WinPython\DataLab.exe" KeyPath="yes" />
+                <File Source=".\dist\DataLab-WinPython\WinPython Command Prompt.exe" KeyPath="no" />
+                <File Source=".\dist\DataLab-WinPython\WinPython Control Panel.exe" KeyPath="no" />
+                <File Source=".\dist\DataLab-WinPython\WinPython Interpreter.exe" KeyPath="no" />
+            </Component>
+            <!-- Automatically inserted components -->
+            <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="97d16267-1153-4e59-8c9f-d3b806a03be2">
+                <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="ApplicationStartMenuShortcut01" Name="DataLab-WinPython Command Prompt" Description="DataLab-WinPython Command Prompt" Target="[INSTALLFOLDER]\WinPython Command Prompt.exe" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="ApplicationStartMenuShortcut02" Name="DataLab-WinPython Control Panel" Description="DataLab-WinPython Control Panel" Target="[INSTALLFOLDER]\WinPython Control Panel.exe" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\DataLab" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
