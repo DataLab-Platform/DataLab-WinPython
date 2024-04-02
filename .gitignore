@@ -78,3 +78,6 @@ docs/_build/
 target/
 
 /.spyproject
+
+# Temporary files
+tmp/

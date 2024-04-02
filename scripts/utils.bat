@@ -31,7 +31,6 @@ REM ======================================================
     for /F "tokens=*" %%A in (.env) do (
         set %%A
     )
-    set RLSPTH=%~dp0..\%CI_DST%-%CI_VER%_release\
     goto:eof
 
 :UseWinPython

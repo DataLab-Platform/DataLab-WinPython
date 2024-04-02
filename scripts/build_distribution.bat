@@ -12,9 +12,24 @@ cd %ROOTPATH%
 
 @REM Build WinPython distribution
 @REM ===========================================================================
-"C:\Program Files\7-Zip\7z.exe" x -y -o"." "%CI_WPI%"
-call "%CI_WNM%\scripts\env_for_icons.bat" %*
-cd %CI_WNM%
+
+@REM Extract WinPython distribution
+if not exist "%ROOTPATH%\dist" ( mkdir "%ROOTPATH%\dist" )
+if exist "%ROOTPATH%\dist\%CI_DST%" ( rmdir /s /q "%ROOTPATH%\dist\%CI_DST%" )
+
+@REM Rename extracted folder to %CI_DST%
+if not exist ".\tmp" ( mkdir ".\tmp" )
+"C:\Program Files\7-Zip\7z.exe" x -y -o".\tmp" "%CI_WPI%"
+for /D %%I in (.\tmp\*) do set WP_FOLDER=%%~nxI
+pushd ".\tmp"
+ren %WP_FOLDER% %CI_DST%
+popd
+move ".\tmp\%CI_DST%" "%ROOTPATH%\dist\"
+rmdir /S /Q ".\tmp"
+
+@REM Customize WinPython distribution
+call "%ROOTPATH%\dist\%CI_DST%\scripts\env_for_icons.bat" %*
+cd %ROOTPATH%\dist\%CI_DST%
 del IPython*.exe
 del Jupyter*.exe
 del Pyzo.exe
@@ -37,10 +52,10 @@ set NSIS_WORKDIR=$EXEDIR\scripts
 set NSIS_COMMAND=wscript.exe
 for %%f in (executables\*.bat) do (
   @REM Copy each .bat file to the "scripts" folder:
-  copy "executables\%%~nxf" "%ROOTPATH%\%CI_WNM%\scripts"
+  copy "executables\%%~nxf" "%ROOTPATH%\dist\%CI_DST%\scripts"
   @REM Set NSIS_ICON, NSIS_OUTFILE and NSIS_PARAMS for each .bat file:
   set NSIS_ICON=%ROOTPATH%\executables\%%~nf.ico
-  set NSIS_OUTFILE=%ROOTPATH%\%CI_WNM%\%%~nf.exe
+  set NSIS_OUTFILE=%ROOTPATH%\dist\%CI_DST%\%%~nf.exe
   set NSIS_PARAMS=Noshell.vbs %%~nxf
   "C:\Program Files (x86)\NSIS\makensis.exe" nsis\launcher.nsi
 )

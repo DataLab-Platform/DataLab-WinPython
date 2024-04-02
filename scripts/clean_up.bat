@@ -10,8 +10,8 @@ call %FUNC% SetEnvVars
 set ROOTPATH=%SCRIPTPATH%\..\
 cd %ROOTPATH%
 
-if exist "%CI_WNM%" ( rmdir /s /q "%CI_WNM%" )
-if exist "%CI_DST%" ( rmdir /s /q "%CI_DST%" )
+if exist "tmp" ( rmdir /s /q "tmp" )
+if exist "dist" ( rmdir /s /q "dist" )
 if exist "packages" ( rmdir /s /q "packages" )
 
 call %FUNC% EndOfScript
