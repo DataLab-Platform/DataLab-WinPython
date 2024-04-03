@@ -8,7 +8,7 @@ REM ======================================================
 setlocal enabledelayedexpansion
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% SetEnvVars
-set ROOTPATH=%SCRIPTPATH%\..\
+set ROOTPATH=%SCRIPTPATH%\..
 cd %ROOTPATH%
 
 @REM CI_WPI=Winpython64-3.9.10.0dot.exe => PYSUFFIX=Py39
@@ -37,7 +37,7 @@ wix build "wix\%CI_DST%-%CI_VER%.wxs" -ext WixToolset.UI.wixext
 @REM Create release directory
 @REM ===========================================================================
 if not exist "%ROOTPATH%\releases" ( mkdir "%ROOTPATH%\releases" )
-set RLSPTH=%ROOTPATH%\releases\%CI_DST%-%CI_VER%_release\
+set RLSPTH=%ROOTPATH%\releases\%CI_DST%-%CI_VER%_release
 if exist "%RLSPTH%" ( rmdir /s /q "%RLSPTH%" )
 mkdir %RLSPTH%
 move /Y %ROOTPATH%\wix\%CI_DST%-%CI_VER%.msi %RLSPTH%\%CI_DST%-%CI_VER%_%PYSUFFIX%.msi
