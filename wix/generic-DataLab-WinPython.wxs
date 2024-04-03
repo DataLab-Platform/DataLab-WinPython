@@ -1,6 +1,6 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-    <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="200" Scope="perUser">
+    <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="200" Scope="perMachine">
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <Icon Id="DataLab.exe" SourceFile=".\executables\DataLab.ico" />
         <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
