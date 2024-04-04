@@ -8,7 +8,6 @@ Licensed under the terms of the BSD 3-Clause
 
 */
 
-; !addincludedir "%NSIS_INCLUDEDIR%"
 !define COMMAND "$%NSIS_COMMAND%"
 !define PARAMETERS "$%NSIS_PARAMS%"
 !define WORKDIR "$%NSIS_WORKDIR%"

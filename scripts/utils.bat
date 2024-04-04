@@ -28,8 +28,13 @@ REM ======================================================
 
 :SetEnvVars
     cd %~dp0..
+    @REM Get parent directory name (that is the project name) 
+    @REM and set it to "CI_DST" environment variable:
+    for %%I in (.) do set CI_DST=%%~nxI
+    echo Project name: "%CI_DST%"
     for /F "tokens=*" %%A in (.env) do (
         set %%A
+        echo   %%A
     )
     goto:eof
 

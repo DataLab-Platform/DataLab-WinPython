@@ -33,5 +33,5 @@ DataLab-WinPython is based on the following technologies:
 * NSIS for the launcher executable
 * WiX Toolset for the installer
 * WinPython Python distribution
-* Python package manager "pip"
+* Python package manager `pip`
 * 7-zip compression software
