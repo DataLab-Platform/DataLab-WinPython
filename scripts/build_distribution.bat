@@ -45,6 +45,18 @@ cd %ROOTPATH%
 pip install --no-cache-dir --no-index --find-links=packages cdl==%CI_VER%
 pip install --no-cache-dir --no-index --find-links=packages -r requirements.txt
 
+@REM Apply patches
+@REM ===========================================================================
+@REM Patches are folders in the "patches" folder: for each folder in "patches",
+@REM check if that folder exists in the WinPython distribution and, if so, copy
+@REM the content of that folder to the corresponding folder in the WinPython,
+@REM recursively.
+for /d %%d in (patches\*) do (
+    if exist "dist\%CI_DST%\%%~nxd" (
+        xcopy /s /y "patches\%%~nxd" "dist\%CI_DST%\%%~nxd"
+    )
+)
+
 @REM Remove all '__pycache__' folders
 @REM for /d /r "%ROOTPATH%\dist\%CI_DST%" %%d in (__pycache__) do (
 @REM     rd /s /q "%%d"
