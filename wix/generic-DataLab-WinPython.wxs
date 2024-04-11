@@ -3,6 +3,7 @@
     <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="200" Scope="perUserOrMachine">
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <Icon Id="DataLab.exe" SourceFile=".\executables\DataLab.ico" />
+        <Icon Id="DataLabResetIcon" SourceFile=".\executables\DataLab-Reset.ico" />
         <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
         <WixVariable Id="WixUIDialogBmp" Value=".\wix\dialog.bmp" />
         <WixVariable Id="WixUIBannerBmp" Value=".\wix\banner.bmp" />
@@ -33,6 +34,7 @@
             <!-- Automatically inserted components -->
             <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="97d16267-1153-4e59-8c9f-d3b806a03be2">
                 <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="ResetApplicationStartMenuShortcut" Name="Reset DataLab" Description="Resets DataLab configuration" Target="[INSTALLFOLDER]\DataLab.exe" Arguments="--reset" WorkingDirectory="INSTALLFOLDER" Icon="DataLabResetIcon" />
                 <Shortcut Id="ApplicationStartMenuShortcut01" Name="DataLab-WinPython Command Prompt" Description="DataLab-WinPython Command Prompt" Target="[INSTALLFOLDER]\WinPython Command Prompt.exe" WorkingDirectory="INSTALLFOLDER" />
                 <Shortcut Id="ApplicationStartMenuShortcut02" Name="DataLab-WinPython Control Panel" Description="DataLab-WinPython Control Panel" Target="[INSTALLFOLDER]\WinPython Control Panel.exe" WorkingDirectory="INSTALLFOLDER" />
                 <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
