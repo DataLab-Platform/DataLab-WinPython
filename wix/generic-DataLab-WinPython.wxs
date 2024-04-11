@@ -1,5 +1,5 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-    xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+    xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
     <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="200" Scope="perUserOrMachine">
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <Icon Id="DataLab.exe" SourceFile=".\executables\DataLab.ico" />
@@ -12,6 +12,9 @@
         <Feature Id="ProductFeature" Title="DataLab-WinPython" Level="1">
             <ComponentGroupRef Id="ProductComponents" />
         </Feature>
+        <Property Id="REMOVEPROP">
+            <RegistrySearch Id="GetInstallFolderForNukingPurposes" Root="HKCU" Key="SOFTWARE\[Manufacturer]\[ProductName]" Name="InstallFolder" Type="directory" />
+        </Property>
     </Package>
     <Fragment>
         <StandardDirectory Id="ProgramFilesFolder">
@@ -39,7 +42,9 @@
                 <Shortcut Id="ApplicationStartMenuShortcut02" Name="DataLab-WinPython Control Panel" Description="DataLab-WinPython Control Panel" Target="[INSTALLFOLDER]\WinPython Control Panel.exe" WorkingDirectory="INSTALLFOLDER" />
                 <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
-                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\DataLab" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="InstallFolder" Type="string" Value="[INSTALLFOLDER]" />
+                <util:RemoveFolderEx On="both" Property="REMOVEPROP" />
             </Component>
         </ComponentGroup>
     </Fragment>

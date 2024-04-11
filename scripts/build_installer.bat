@@ -32,7 +32,7 @@ call %FUNC% DeployPython
 echo Generating .wxs file for WiX installer...
 %PYTHON% "wix\makewxs.py" %CI_DST% %CI_VER%
 echo Building WiX Installer...
-wix build "wix\%CI_DST%-%CI_VER%.wxs" -ext WixToolset.UI.wixext
+wix build "wix\%CI_DST%-%CI_VER%.wxs" -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext
 
 @REM Create release directory
 @REM ===========================================================================
