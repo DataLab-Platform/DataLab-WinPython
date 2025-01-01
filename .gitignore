@@ -9,9 +9,8 @@ doctmp/
 releases/
 DataLab-WinPython*/
 dependencies*.txt
-nsis/icons/*.ico
-nsis/images/*.bmp
 packages/
+launchers/
 Win*.exe
 WPy*/
 
