@@ -14,6 +14,10 @@ launchers/
 Win*.exe
 WPy*/
 
+# Visual Studio Code
+.venv
+.env
+
 # Created by https://www.gitignore.io/api/python
 
 ### Python ###
