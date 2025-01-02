@@ -30,7 +30,7 @@ Technologies
 DataLab-WinPython is based on the following technologies:
 
 * Windows batch scripts (to minimize prerequisites)
-* C++ for the launcher executable (to minimize dependencies)
+* C++ for the launcher executable (to minimize dependencies), using MSVC (tested with Visual Studio 2022 Community Edition but should work with pretty much any version)
 * WiX Toolset for the installer
 * WinPython Python distribution
 * Python package manager `pip`
