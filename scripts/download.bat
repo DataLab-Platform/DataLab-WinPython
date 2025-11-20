@@ -9,7 +9,7 @@ mkdir packages
 
 call %FUNC% DeployPython
 %PYTHON% -m pip install --upgrade pip
-pip download cdl==%CI_VER% -d packages
+pip download datalab-platform==%CI_VER% -d packages
 pip download -r requirements.txt -d packages
 
 rmdir /S /Q ".\tmp"

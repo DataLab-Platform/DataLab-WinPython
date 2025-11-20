@@ -3,7 +3,7 @@ REM ======================================================
 REM Generic Python Installer build script
 REM ------------------------------------------
 REM Licensed under the terms of the BSD 3-Clause
-REM (see cdl/LICENSE for details)
+REM (see datalab/LICENSE for details)
 REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% SetEnvVars
@@ -40,7 +40,7 @@ rmdir /S /Q notebooks
 rmdir /S /Q t
 cd %ROOTPATH%
 @REM Install packages
-pip install --no-cache-dir --no-index --find-links=packages cdl==%CI_VER%
+pip install --no-cache-dir --no-index --find-links=packages datalab-platform==%CI_VER%
 pip install --no-cache-dir --no-index --find-links=packages -r requirements.txt
 
 @REM Apply patches
