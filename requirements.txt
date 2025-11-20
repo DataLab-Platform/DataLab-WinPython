@@ -1,1 +1,6 @@
 PyQt5
+jupyterlab
+spyder
+spyder-kernels
+spyder-notebook
+spyder-terminal

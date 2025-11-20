@@ -31,10 +31,8 @@ rmdir /S /Q ".\tmp"
 call "%ROOTPATH%\dist\%CI_DST%\scripts\env_for_icons.bat" %*
 cd %ROOTPATH%\dist\%CI_DST%
 del IPython*.exe
-del Jupyter*.exe
 del Pyzo.exe
 del Qt*.exe
-del Spyder*.exe
 del VS*.exe
 del IDLE*.exe
 del "WinPython Powershell Prompt.exe"
