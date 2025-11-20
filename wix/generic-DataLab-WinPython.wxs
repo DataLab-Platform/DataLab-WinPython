@@ -35,13 +35,33 @@
                 <File Source=".\dist\DataLab-WinPython\WinPython Interpreter.exe" KeyPath="no" />
             </Component>
             <!-- Automatically inserted components -->
-            <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="97d16267-1153-4e59-8c9f-d3b806a03be2">
-                <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
+            <!-- Shortcut components: one component per shortcut with registry KeyPath -->
+            <Component Id="PC_Shortcut_Main" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" Icon="DataLab.exe" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_main" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder1" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_Reset" Directory="ApplicationProgramsFolder" Guid="*">
                 <Shortcut Id="ResetApplicationStartMenuShortcut" Name="Reset DataLab" Description="Resets DataLab configuration" Target="[INSTALLFOLDER]\DataLab.exe" Arguments="--reset" WorkingDirectory="INSTALLFOLDER" Icon="DataLabResetIcon" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_reset" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder2" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_CommandPrompt" Directory="ApplicationProgramsFolder" Guid="*">
                 <Shortcut Id="ApplicationStartMenuShortcut01" Name="DataLab-WinPython Command Prompt" Description="DataLab-WinPython Command Prompt" Target="[INSTALLFOLDER]\WinPython Command Prompt.exe" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_cmdprompt" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder3" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_ControlPanel" Directory="ApplicationProgramsFolder" Guid="*">
                 <Shortcut Id="ApplicationStartMenuShortcut02" Name="DataLab-WinPython Control Panel" Description="DataLab-WinPython Control Panel" Target="[INSTALLFOLDER]\WinPython Control Panel.exe" WorkingDirectory="INSTALLFOLDER" />
-                <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
-                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_controlpanel" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder4" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_Uninstall" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" Icon="DataLab.exe" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_uninstall" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder5" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Registry" Directory="INSTALLFOLDER" Guid="*">
                 <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes" />
                 <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="InstallFolder" Type="string" Value="[INSTALLFOLDER]" />
                 <util:RemoveFolderEx On="both" Property="REMOVEPROP" />
