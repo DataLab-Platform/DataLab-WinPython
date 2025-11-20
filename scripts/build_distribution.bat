@@ -55,6 +55,9 @@ for /d %%d in (patches\*) do (
     )
 )
 
+@REM Windows 7 SP1 compatibility fix
+copy resources\api-ms-win-core-path-l1-1-0.dll "dist\%CI_DST%\python\"
+
 @REM Remove all '__pycache__' folders
 @REM for /d /r "%ROOTPATH%\dist\%CI_DST%" %%d in (__pycache__) do (
 @REM     rd /s /q "%%d"
