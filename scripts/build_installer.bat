@@ -41,9 +41,10 @@ set RLSPTH=%ROOTPATH%\releases\%CI_DST%-%CI_VER%_release
 if exist "%RLSPTH%" ( rmdir /s /q "%RLSPTH%" )
 mkdir %RLSPTH%
 move /Y %ROOTPATH%\wix\%CI_DST%-%CI_VER%.msi %RLSPTH%\%CI_DST%-%CI_VER%_%PYSUFFIX%.msi
-explorer %RLSPTH%
 
 @REM Clean up
 rmdir /S /Q ".\tmp"
+
+explorer %RLSPTH% || exit /b 0
 
 call %FUNC% EndOfScript
