@@ -1,26 +1,41 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-    <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="200" Scope="perUserOrMachine">
+    <Package Name="DataLab-WinPython" ProductCode="f3313a2e-1d05-4a9f-af25-046ac0227a95" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="a8002fab-c887-4ada-9792-ba1aedae50b6" InstallerVersion="500" Scope="perUserOrMachine" Compressed="yes">
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <Icon Id="DataLab.exe" SourceFile=".\executables\DataLab.ico" />
         <Icon Id="DataLabResetIcon" SourceFile=".\executables\DataLab-Reset.ico" />
         <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
         <WixVariable Id="WixUIDialogBmp" Value=".\wix\dialog.bmp" />
         <WixVariable Id="WixUIBannerBmp" Value=".\wix\banner.bmp" />
-        <MediaTemplate EmbedCab="yes" />
+        <MediaTemplate EmbedCab="yes" CompressionLevel="none" />
+        <Property Id="MSIFASTINSTALL" Value="2" />
         <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER"/>
         <Feature Id="ProductFeature" Title="DataLab-WinPython" Level="1">
             <ComponentGroupRef Id="ProductComponents" />
         </Feature>
-        <Property Id="REMOVEPROP">
-            <RegistrySearch Id="GetInstallFolderForNukingPurposes" Root="HKCU" Key="SOFTWARE\[Manufacturer]\[ProductName]" Name="InstallFolder" Type="directory" />
-        </Property>
+        
+        <!-- Custom actions for archive extraction using bundled 7za.exe with hidden VBScript wrappers -->
+        <CustomAction Id="ExtractArchive" Directory="INSTALLFOLDER" Execute="deferred" Impersonate="no" HideTarget="yes"
+                      ExeCommand="&quot;[System64Folder]wscript.exe&quot; &quot;[INSTALLFOLDER]extract.vbs&quot; &quot;[INSTALLFOLDER]7za.exe&quot; &quot;[INSTALLFOLDER]DataLab-WinPython-files.zip&quot; &quot;[INSTALLFOLDER]&quot;"
+                      Return="check" />
+        
+        <CustomAction Id="DeleteArchive" Directory="INSTALLFOLDER" Execute="deferred" Impersonate="no" HideTarget="yes"
+                      ExeCommand="&quot;[System64Folder]cmd.exe&quot; /c &quot;del /q &quot;[INSTALLFOLDER]DataLab-WinPython-files.zip&quot; &amp; del /q &quot;[INSTALLFOLDER]7za.exe&quot; &amp; del /q &quot;[INSTALLFOLDER]extract.vbs&quot;&quot;"
+                      Return="ignore" />
+        
+        <CustomAction Id="CleanupOnUninstall" Directory="INSTALLFOLDER" Execute="deferred" Impersonate="no" HideTarget="yes"
+                      ExeCommand="&quot;[System64Folder]wscript.exe&quot; &quot;[INSTALLFOLDER]cleanup.vbs&quot; &quot;[INSTALLFOLDER]&quot;"
+                      Return="ignore" />
+        
+        <InstallExecuteSequence>
+            <Custom Action="ExtractArchive" After="InstallFiles" Condition="NOT Installed" />
+            <Custom Action="DeleteArchive" After="ExtractArchive" Condition="NOT Installed" />
+            <Custom Action="CleanupOnUninstall" Before="RemoveFiles" Condition="REMOVE=&quot;ALL&quot;" />
+        </InstallExecuteSequence>
     </Package>
     <Fragment>
         <StandardDirectory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLFOLDER" Name="DataLab-WinPython">
-                <!-- Automatically inserted directories -->
-            </Directory>
+            <Directory Id="INSTALLFOLDER" Name="DataLab-WinPython" />
         </StandardDirectory>
         <StandardDirectory Id="ProgramMenuFolder">
             <Directory Id="ApplicationProgramsFolder" Name="DataLab-WinPython" />
@@ -28,17 +43,33 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="ProductComponents">
-            <Component Id="PC_Files" Directory="INSTALLFOLDER" Guid="502b999f-a88e-464b-ba6c-a8c987937c41">
-                <File Source=".\dist\DataLab-WinPython\DataLab.exe" KeyPath="yes" />
-                <File Source=".\dist\DataLab-WinPython\Jupyter Lab.exe" KeyPath="no" />
-                <File Source=".\dist\DataLab-WinPython\Jupyter Notebook.exe" KeyPath="no" />
-                <File Source=".\dist\DataLab-WinPython\Spyder.exe" KeyPath="no" />
-                <File Source=".\dist\DataLab-WinPython\Spyder reset.exe" KeyPath="no" />
-                <File Source=".\dist\DataLab-WinPython\WinPython Command Prompt.exe" KeyPath="no" />
-                <File Source=".\dist\DataLab-WinPython\WinPython Control Panel.exe" KeyPath="no" />
-                <File Source=".\dist\DataLab-WinPython\WinPython Interpreter.exe" KeyPath="no" />
+            <!-- 7za.exe standalone extractor -->
+            <Component Id="PC_7za" Directory="INSTALLFOLDER" Guid="b2c3d4e5-f6a7-5b6c-9d0e-1f2a3b4c5d6e">
+                <File Id="File7za" Name="7za.exe" Source=".\wix\7za.exe" KeyPath="yes" />
             </Component>
-            <!-- Automatically inserted components -->
+            
+            <!-- VBScript helpers for silent extraction -->
+            <Component Id="PC_VBScripts" Directory="INSTALLFOLDER" Guid="c3d4e5f6-a7b8-6c7d-0e1f-2a3b4c5d6e7f">
+                <File Id="FileExtractVBS" Name="extract.vbs" Source=".\wix\extract.vbs" KeyPath="yes" />
+                <File Id="FileCleanupVBS" Name="cleanup.vbs" Source=".\wix\cleanup.vbs" />
+            </Component>
+            
+            <!-- Archive component -->
+            <Component Id="PC_Archive" Directory="INSTALLFOLDER" Guid="a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d">
+                <File Id="ArchiveFile" Name="DataLab-WinPython-files.zip" Source="{archive_path}" KeyPath="yes" />
+            </Component>
+            
+            <!-- Launcher executables component -->
+            <Component Id="PC_Executables" Directory="INSTALLFOLDER" Guid="502b999f-a88e-464b-ba6c-a8c987937c41">
+                <File Source=".\dist\DataLab-WinPython\DataLab.exe" KeyPath="yes" />
+                <File Source=".\dist\DataLab-WinPython\Jupyter Lab.exe" />
+                <File Source=".\dist\DataLab-WinPython\Jupyter Notebook.exe" />
+                <File Source=".\dist\DataLab-WinPython\Spyder.exe" />
+                <File Source=".\dist\DataLab-WinPython\Spyder reset.exe" />
+                <File Source=".\dist\DataLab-WinPython\WinPython Command Prompt.exe" />
+                <File Source=".\dist\DataLab-WinPython\WinPython Control Panel.exe" />
+                <File Source=".\dist\DataLab-WinPython\WinPython Interpreter.exe" />
+            </Component>
             <!-- Shortcut components: one component per shortcut with registry KeyPath -->
             <Component Id="PC_Shortcut_Main" Directory="ApplicationProgramsFolder" Guid="*">
                 <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" Icon="DataLab.exe" />
@@ -92,8 +123,6 @@
             </Component>
             <Component Id="PC_Registry" Directory="INSTALLFOLDER" Guid="*">
                 <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="InstallFolder" Type="string" Value="[INSTALLFOLDER]" />
-                <util:RemoveFolderEx On="both" Property="REMOVEPROP" />
             </Component>
         </ComponentGroup>
     </Fragment>

@@ -16,8 +16,6 @@ History:
 import argparse
 import os
 import os.path as osp
-import uuid
-import xml.etree.ElementTree as ET
 
 COUNT = 0
 
@@ -48,93 +46,39 @@ def insert_text_after(text: str, containing: str, content: str) -> str:
 def make_wxs(product_name: str, version: str) -> None:
     """Make a .wxs file for the DataLab Windows installer."""
     wix_dir = osp.abspath(osp.dirname(__file__))
-    proj_dir = osp.join(wix_dir, os.pardir)
+    proj_dir = osp.abspath(osp.join(wix_dir, os.pardir))
     dist_dir = osp.join(proj_dir, "dist", product_name)
+    archive_path = osp.join(proj_dir, "dist", f"{product_name}-files.zip")
     wxs_path = osp.join(wix_dir, f"generic-{product_name}.wxs")
     output_path = osp.join(wix_dir, f"{product_name}-{version}.wxs")
 
-    dir_ids: dict[str, str] = {}
-    file_ids: dict[str, str] = {}
+    # Check if archive exists
+    if not osp.exists(archive_path):
+        print(f"ERROR: Archive not found at: {archive_path}")
+        print(f"Working directory: {os.getcwd()}")
+        print(f"Project directory: {proj_dir}")
+        raise FileNotFoundError(f"Archive not found: {archive_path}")
 
-    files_dict: dict[str, list[str]] = {}
+    # Get archive size for statistics
+    archive_size_mb = osp.getsize(archive_path) / (1024 * 1024)
 
-    dir_str_list: list[str] = []
-    comp_str_list: list[str] = []
+    # Count files in dist directory for statistics
+    total_files = sum(len(files) for _, _, files in os.walk(dist_dir))
 
-    for pth in os.listdir(dist_dir):
-        root_dir = osp.join(dist_dir, pth)
-
-        if not osp.isdir(root_dir):
-            continue
-
-        dpath_list : list[str] = []
-        for root, dirs, filenames in os.walk(root_dir):
-            for dpath in dirs:
-                relpath = osp.relpath(osp.join(root, dpath), proj_dir)
-                dpath_list.append(relpath)
-                dir_ids[relpath] = generate_id()
-                files_dict.setdefault(osp.dirname(relpath), [])
-            for filename in filenames:
-                relpath = osp.relpath(osp.join(root, filename), proj_dir)
-                file_ids[relpath] = generate_id()
-                files_dict.setdefault(osp.dirname(relpath), []).append(relpath)
-
-        # Create the base directory structure in XML:
-        base_name = osp.basename(root_dir)
-        base_path = osp.relpath(root_dir, proj_dir)
-        base_id = dir_ids[base_path] = generate_id()
-        dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
-
-        # Nesting directories, recursively, in XML:
-        for dpath in sorted(dpath_list):
-            dname = osp.basename(dpath)
-            parent = dir_xml
-            for element in parent.iter():
-                if element.get("Id") == dir_ids[osp.dirname(dpath)]:
-                    parent = element
-                    break
-            else:
-                raise ValueError(f"Parent directory not found for {dpath}")
-            ET.SubElement(parent, "Directory", Id=dir_ids[dpath], Name=dname)
-        space = " " * 4
-        ET.indent(dir_xml, space=space, level=4)
-        dir_str_list.append(space * 4 + ET.tostring(dir_xml, encoding="unicode"))
-
-        # Create additionnal components for each file in the directory structure:
-        for dpath in sorted([base_path] + dpath_list):
-            did = dir_ids[dpath]
-            files = files_dict.get(dpath, [])
-            if files:
-                # This is a directory with files, so we need to create components:
-                for path in files:
-                    fid = file_ids[path]
-                    guid = str(uuid.uuid4())
-                    comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
-                    ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
-                    ET.indent(comp_xml, space=space, level=3)
-                    comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
-                    comp_str_list.append(comp_str)
-            elif dpath != base_path:
-                # This is an empty directory, so we need to create a folder:
-                guid = str(uuid.uuid4())
-                cdid = f"CreateFolder_{did}"
-                comp_xml = ET.Element("Component", Id=cdid, Directory=did, Guid=guid)
-                ET.SubElement(comp_xml, "CreateFolder")
-                ET.indent(comp_xml, space=space, level=3)
-                comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
-                comp_str_list.append(comp_str)
-
-    dir_str = "\n".join(dir_str_list).replace("><", ">\n<")
-    # print("Directory structure:\n", dir_str)
-    comp_str = "\n".join(comp_str_list).replace("><", ">\n<")
-    # print("Component structure:\n", comp_str)
+    print("Archive-based installer mode:")
+    print(f"  Archive: {osp.basename(archive_path)}")
+    print(f"  Archive size: {archive_size_mb:.1f} MB")
+    print(f"  Total files archived: {total_files}")
+    print("  Components in MSI: ~15 (executables + archive + cleanup)")
 
     # Create the .wxs file:
     with open(wxs_path, "r", encoding="utf-8") as fd:
         wxs = fd.read()
-    wxs = insert_text_after(dir_str, "<!-- Automatically inserted directories -->", wxs)
-    wxs = insert_text_after(comp_str, "<!-- Automatically inserted components -->", wxs)
+
+    # Replace version placeholder
     wxs = wxs.replace("{version}", version)
+    wxs = wxs.replace("{archive_path}", f"dist\\{product_name}-files.zip")
+
     with open(output_path, "w", encoding="utf-8") as fd:
         fd.write(wxs)
     print("Successfully created:", output_path)

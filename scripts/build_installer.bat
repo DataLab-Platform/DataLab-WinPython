@@ -29,6 +29,17 @@ popd
 @REM Build installer
 @REM ===========================================================================
 call %FUNC% DeployPython
+
+@REM Create archive of Python environment
+@REM ===========================================================================
+echo Creating archive of Python environment...
+set ARCHIVE_PATH=%ROOTPATH%\dist\%CI_DST%-files.zip
+if exist "%ARCHIVE_PATH%" ( del /q "%ARCHIVE_PATH%" )
+pushd %ROOTPATH%\dist\%CI_DST%
+"C:\Program Files\7-Zip\7z.exe" a -tzip -mx=1 "%ARCHIVE_PATH%" *
+popd
+echo Archive created: %ARCHIVE_PATH%
+
 echo Generating .wxs file for WiX installer...
 %PYTHON% "wix\makewxs.py" %CI_DST% %CI_VER%
 echo Building WiX Installer...
