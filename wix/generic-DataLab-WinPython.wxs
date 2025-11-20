@@ -30,6 +30,10 @@
         <ComponentGroup Id="ProductComponents">
             <Component Id="PC_Files" Directory="INSTALLFOLDER" Guid="502b999f-a88e-464b-ba6c-a8c987937c41">
                 <File Source=".\dist\DataLab-WinPython\DataLab.exe" KeyPath="yes" />
+                <File Source=".\dist\DataLab-WinPython\Jupyter Lab.exe" KeyPath="no" />
+                <File Source=".\dist\DataLab-WinPython\Jupyter Notebook.exe" KeyPath="no" />
+                <File Source=".\dist\DataLab-WinPython\Spyder.exe" KeyPath="no" />
+                <File Source=".\dist\DataLab-WinPython\Spyder reset.exe" KeyPath="no" />
                 <File Source=".\dist\DataLab-WinPython\WinPython Command Prompt.exe" KeyPath="no" />
                 <File Source=".\dist\DataLab-WinPython\WinPython Control Panel.exe" KeyPath="no" />
                 <File Source=".\dist\DataLab-WinPython\WinPython Interpreter.exe" KeyPath="no" />
@@ -56,10 +60,35 @@
                 <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_controlpanel" Type="integer" Value="1" KeyPath="yes" />
                 <RemoveFolder Id="RemoveApplicationProgramsFolder4" Directory="ApplicationProgramsFolder" On="uninstall" />
             </Component>
+            <Component Id="PC_Shortcut_Interpreter" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut03" Name="DataLab-WinPython Interpreter" Description="DataLab-WinPython Interpreter" Target="[INSTALLFOLDER]\WinPython Interpreter.exe" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_interpreter" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder5" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_JupyterLab" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut04" Name="Jupyter Lab" Description="Jupyter Lab" Target="[INSTALLFOLDER]\Jupyter Lab.exe" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_jupyterlab" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder6" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_JupyterNotebook" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut05" Name="Jupyter Notebook" Description="Jupyter Notebook" Target="[INSTALLFOLDER]\Jupyter Notebook.exe" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_jupyternotebook" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder7" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_Spyder" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut06" Name="Spyder" Description="Spyder" Target="[INSTALLFOLDER]\Spyder.exe" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_spyder" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder8" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+            <Component Id="PC_Shortcut_SpyderReset" Directory="ApplicationProgramsFolder" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut07" Name="Spyder reset" Description="Spyder reset" Target="[INSTALLFOLDER]\Spyder reset.exe" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_spyderreset" Type="integer" Value="1" KeyPath="yes" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder9" Directory="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
             <Component Id="PC_Shortcut_Uninstall" Directory="ApplicationProgramsFolder" Guid="*">
                 <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" Icon="DataLab.exe" />
                 <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="shortcut_uninstall" Type="integer" Value="1" KeyPath="yes" />
-                <RemoveFolder Id="RemoveApplicationProgramsFolder5" Directory="ApplicationProgramsFolder" On="uninstall" />
+                <RemoveFolder Id="RemoveApplicationProgramsFolder10" Directory="ApplicationProgramsFolder" On="uninstall" />
             </Component>
             <Component Id="PC_Registry" Directory="INSTALLFOLDER" Guid="*">
                 <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes" />
