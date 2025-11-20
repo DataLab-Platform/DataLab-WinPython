@@ -48,7 +48,7 @@ def make_wxs(product_name: str, version: str) -> None:
     wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.abspath(osp.join(wix_dir, os.pardir))
     dist_dir = osp.join(proj_dir, "dist", product_name)
-    archive_path = osp.join(proj_dir, "dist", f"{product_name}-files.zip")
+    archive_path = osp.join(proj_dir, "dist", f"{product_name}-files.7z")
     wxs_path = osp.join(wix_dir, f"generic-{product_name}.wxs")
     output_path = osp.join(wix_dir, f"{product_name}-{version}.wxs")
 
@@ -62,12 +62,24 @@ def make_wxs(product_name: str, version: str) -> None:
     # Get archive size for statistics
     archive_size_mb = osp.getsize(archive_path) / (1024 * 1024)
 
+    # Calculate actual installed size (extracted files) in KB for ARPSIZE
+    total_size_bytes = 0
+    for root, dirs, files in os.walk(dist_dir):
+        for filename in files:
+            filepath = osp.join(root, filename)
+            if osp.exists(filepath):
+                total_size_bytes += osp.getsize(filepath)
+    installed_size_kb = int(total_size_bytes / 1024)
+
     # Count files in dist directory for statistics
     total_files = sum(len(files) for _, _, files in os.walk(dist_dir))
 
     print("Archive-based installer mode:")
     print(f"  Archive: {osp.basename(archive_path)}")
     print(f"  Archive size: {archive_size_mb:.1f} MB")
+    print(
+        f"  Installed size: {installed_size_kb / 1024:.1f} MB ({installed_size_kb} KB)"
+    )
     print(f"  Total files archived: {total_files}")
     print("  Components in MSI: ~15 (executables + archive + cleanup)")
 
@@ -77,7 +89,8 @@ def make_wxs(product_name: str, version: str) -> None:
 
     # Replace version placeholder
     wxs = wxs.replace("{version}", version)
-    wxs = wxs.replace("{archive_path}", f"dist\\{product_name}-files.zip")
+    wxs = wxs.replace("{archive_path}", f"dist\\{product_name}-files.7z")
+    wxs = wxs.replace("{installed_size}", str(installed_size_kb))
 
     with open(output_path, "w", encoding="utf-8") as fd:
         fd.write(wxs)

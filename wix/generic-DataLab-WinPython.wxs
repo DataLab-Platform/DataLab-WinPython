@@ -9,6 +9,7 @@
         <WixVariable Id="WixUIBannerBmp" Value=".\wix\banner.bmp" />
         <MediaTemplate EmbedCab="yes" CompressionLevel="none" />
         <Property Id="MSIFASTINSTALL" Value="2" />
+        <Property Id="ARPSIZE" Value="{installed_size}" />
         <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER"/>
         <Feature Id="ProductFeature" Title="DataLab-WinPython" Level="1">
             <ComponentGroupRef Id="ProductComponents" />
@@ -16,11 +17,11 @@
         
         <!-- Custom actions for archive extraction using bundled 7za.exe with hidden VBScript wrappers -->
         <CustomAction Id="ExtractArchive" Directory="INSTALLFOLDER" Execute="deferred" Impersonate="no" HideTarget="yes"
-                      ExeCommand="&quot;[System64Folder]wscript.exe&quot; &quot;[INSTALLFOLDER]extract.vbs&quot; &quot;[INSTALLFOLDER]7za.exe&quot; &quot;[INSTALLFOLDER]DataLab-WinPython-files.zip&quot; &quot;[INSTALLFOLDER]&quot;"
+                      ExeCommand="&quot;[System64Folder]wscript.exe&quot; &quot;[INSTALLFOLDER]extract.vbs&quot; &quot;[INSTALLFOLDER]7za.exe&quot; &quot;[INSTALLFOLDER]DataLab-WinPython-files.7z&quot; &quot;[INSTALLFOLDER]&quot;"
                       Return="check" />
         
         <CustomAction Id="DeleteArchive" Directory="INSTALLFOLDER" Execute="deferred" Impersonate="no" HideTarget="yes"
-                      ExeCommand="&quot;[System64Folder]cmd.exe&quot; /c &quot;del /q &quot;[INSTALLFOLDER]DataLab-WinPython-files.zip&quot; &amp; del /q &quot;[INSTALLFOLDER]7za.exe&quot; &amp; del /q &quot;[INSTALLFOLDER]extract.vbs&quot;&quot;"
+                      ExeCommand="&quot;[System64Folder]cmd.exe&quot; /c &quot;del /q &quot;[INSTALLFOLDER]DataLab-WinPython-files.7z&quot; &amp; del /q &quot;[INSTALLFOLDER]7za.exe&quot; &amp; del /q &quot;[INSTALLFOLDER]extract.vbs&quot;&quot;"
                       Return="ignore" />
         
         <CustomAction Id="CleanupOnUninstall" Directory="INSTALLFOLDER" Execute="deferred" Impersonate="no" HideTarget="yes"
@@ -56,7 +57,7 @@
             
             <!-- Archive component -->
             <Component Id="PC_Archive" Directory="INSTALLFOLDER" Guid="a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d">
-                <File Id="ArchiveFile" Name="DataLab-WinPython-files.zip" Source="{archive_path}" KeyPath="yes" />
+                <File Id="ArchiveFile" Name="DataLab-WinPython-files.7z" Source="{archive_path}" KeyPath="yes" />
             </Component>
             
             <!-- Launcher executables component -->

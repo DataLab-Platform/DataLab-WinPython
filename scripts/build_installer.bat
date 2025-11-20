@@ -33,10 +33,10 @@ call %FUNC% DeployPython
 @REM Create archive of Python environment
 @REM ===========================================================================
 echo Creating archive of Python environment...
-set ARCHIVE_PATH=%ROOTPATH%\dist\%CI_DST%-files.zip
+set ARCHIVE_PATH=%ROOTPATH%\dist\%CI_DST%-files.7z
 if exist "%ARCHIVE_PATH%" ( del /q "%ARCHIVE_PATH%" )
 pushd %ROOTPATH%\dist\%CI_DST%
-"C:\Program Files\7-Zip\7z.exe" a -tzip -mx=1 "%ARCHIVE_PATH%" *
+"C:\Program Files\7-Zip\7z.exe" a -t7z -m0=bzip2 -mx=1 -mmt=on "%ARCHIVE_PATH%" *
 popd
 echo Archive created: %ARCHIVE_PATH%
 
