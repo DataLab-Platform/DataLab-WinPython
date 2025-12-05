@@ -6,9 +6,11 @@ DataLab-WinPython
 Description
 -----------
 
-DataLab-WinPython is a Python distribution for Windows, based on WinPython, 
-including [DataLab](https://datalab-platform.com/) (the open-source platform for scientific data analysis) and
-its dependencies.
+DataLab-WinPython is a Python distribution for Windows, based on WinPython, including:
+
+* [DataLab](https://datalab-platform.com/) (the open-source platform for scientific data analysis)
+* [Spyder](https://www.spyder-ide.org/) (the scientific Python IDE)
+* [Jupyter](https://jupyter.org/) notebook/lab (the web-based interactive computing environment)
 
 Motivation
 ----------
@@ -17,8 +19,8 @@ The goal of this project is to provide a simple and efficient way to deploy
 a DataLab-based application on Windows, without requiring the end user to
 install Python, Qt, or any other scientific/technical package.
 
-As opposed to DataLab standalone installer for Windows which is based on 
-[PyInstaller](https://www.pyinstaller.org/), DataLab-WinPython is based on 
+As opposed to DataLab standalone installer for Windows which is based on
+[PyInstaller](https://www.pyinstaller.org/), DataLab-WinPython is based on
 [WinPython](https://winpython.github.io/). This allows to customize the
 Python environment and to install additional packages.
 
